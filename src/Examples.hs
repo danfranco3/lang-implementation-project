@@ -7,9 +7,10 @@
 -}
 module Examples where
 import Fun
+import SECD1
 
 -- simple computations
-ex1 = (Const 42 :+ Const 23) :* Const 5
+ex1 = (Snd (Pair (Const 42) (Const 5)) :+ Const 23) :* Const 5
 
 ex1'= Const 5 :* (Const 42 :+ Const 23) 
 
@@ -44,16 +45,24 @@ ex6 = Fix
 ex7 = App ex6 (Const 10)
 
 -- factorial of a negative number (diverges)
-ex9 = App ex6  (Const (-1))
+ex8 = App ex6  (Const (-1))
 
 -- recursive sum 0^2 + 1^2 + 2^2 + ... + n^2
-ex8 = Fix 
+ex9 = Fix 
       (Lambda "f"
        (Lambda "n"
          (IfZero (Var "n")
           (Const 0)
            ((Var "n" :* Var "n") :+ 
             App (Var "f") (Var "n" :- Const 1)))))
+
+ex10 = Head(List (Const 4) (List (Const 3) Nil))
+
+ex11 = Tail(Tail(List (Const 4) (List (Const 3) Nil)))
+ 
+ex12 = IfZero (Null (List (Const 1) Nil)) (Const 1) (Const 2) -- Should output 2
+
+ex13 = IfZero (Null Nil) (Const 1) (Const 2) -- Should output 1
 
 -- buggy expressions (type errors)
 

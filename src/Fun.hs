@@ -30,6 +30,14 @@ data Term = Var Ident               -- variables
           | IfZero Term Term Term   -- conditional
           | Let Ident Term Term     -- local definition
           | Fix Term                -- fixed-point operator
+          | Pair Term Term          -- pair constructor
+          | Fst Term                -- first
+          | Snd Term                -- second
+          | List Term Term
+          | Head Term
+          | Tail Term
+          | Null Term
+          | Nil
             deriving Show
 
 -- indentifiers are just strings
@@ -48,6 +56,11 @@ fv (e1 :- e2)   = fv e1 `union` fv e2
 fv (IfZero e1 e2 e3) = fv e1 `union` fv e2 `union` fv e3
 fv (Let x e1 e2) = fv e1 `union` delete x (fv e2)
 fv (Fix e)       = fv e
+fv (Fst (Pair e1 _)) = fv e1
+fv (Snd (Pair _ e2)) = fv e2
+fv (Head (List e1 _)) = fv e1
+fv (Tail (List _ e2)) = fv e2
+fv (List Nil _) = []
 
 
 -- end of file -------------------------------------------------

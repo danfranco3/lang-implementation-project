@@ -193,7 +193,40 @@ compile (IfZero e1 e2 e3) sym
 
 compile (Let x e1 e2) sym
     = compile (App (Lambda x e2) e1) sym
+
+compile (Fst (Pair e1 e2)) sym
+    = compile e1 sym
  
+compile (Snd (Pair e1 e2)) sym
+    = compile e2 sym
+
+
+--Implement List and Pair
+-- compile (List e1 e2) sym
+--     = [AP] ++ 
+
+compile (Head (List e1 e2)) sym
+    = compile e1 sym
+
+compile (Head Nil) sym
+    = []
+
+compile (Tail (List e1 e2)) sym
+    = compile e2 sym
+
+compile (Tail Nil) sym
+    = []
+
+compile Nil sym
+    = []
+
+compile (Null e) sym
+    | isEmpty e = [LDC 0]
+    | otherwise = [LDC 1]
+
+isEmpty :: Term -> Bool
+isEmpty Nil = True
+isEmpty l = False
 
 -- compile the main expression
 compileMain :: Term ->  [Instr]
